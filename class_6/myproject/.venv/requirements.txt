@@ -1,0 +1,8 @@
+certifi==2025.10.5
+chardet==3.0.4
+geographiclib==1.52
+geopy==1.23.0
+idna==2.10
+random11==0.0.1
+requests==2.25.0
+urllib3==1.26.20
