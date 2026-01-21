@@ -1,40 +1,64 @@
-class Jar:
-    def __init__(self, capacity=12):
-        # capacity must be a non-negative integer
-        if not isinstance(capacity, int) or capacity < 0:
-            raise ValueError("Capacity must be a non-negative integer")
+import pytest
+from jar import Jar
 
-        self._capacity = capacity
-        self._size = 0  # starts empty
 
-    def __str__(self):
-        # return cookies as 🍪 repeated "size" times
-        return "🍪" * self._size
+def test_init():
+    jar = Jar()
+    assert jar.capacity == 12
+    assert jar.size == 0
 
-    def deposit(self, n):
-        # n must be a positive integer
-        if not isinstance(n, int) or n < 0:
-            raise ValueError("Deposit amount must be a non-negative integer")
 
-        if self._size + n > self._capacity:
-            raise ValueError("Too many cookies")
+def test_str():
+    jar = Jar()
+    jar.deposit(3)
+    assert str(jar) == "🍪🍪🍪"
 
-        self._size += n
 
-    def withdraw(self, n):
-        # n must be a positive integer
-        if not isinstance(n, int) or n < 0:
-            raise ValueError("Withdraw amount must be a non-negative integer")
+def test_deposit():
+    jar = Jar(5)
+    jar.deposit(3)
+    assert jar.size == 3
 
-        if n > self._size:
-            raise ValueError("Not enough cookies")
 
-        self._size -= n
+def test_withdraw():
+    jar = Jar(5)
+    jar.deposit(4)
+    jar.withdraw(2)
+    assert jar.size == 2
 
-    @property
-    def capacity(self):
-        return self._capacity
 
-    @property
-    def size(self):
-        return self._size
+# Extra tests
+
+def test_init_default():
+    jar = Jar()
+    assert jar.capacity == 12
+    assert jar.size == 0
+
+
+def test_init_custom_capacity():
+    jar = Jar(5)
+    assert jar.capacity == 5
+    assert jar.size == 0
+
+
+def test_init_invalid_capacity():
+    with pytest.raises(ValueError):
+        Jar(-1)
+
+    with pytest.raises(ValueError):
+        Jar("hello")
+
+
+def test_deposit_increases_size():
+    jar = Jar(10)
+    jar.deposit(4)
+    assert jar.size == 4
+
+
+def test_deposit_too_many():
+    jar = Jar(5)
+    jar.deposit(5)
+
+    with pytest.raises(ValueError):
+        jar.deposit(1)
+
